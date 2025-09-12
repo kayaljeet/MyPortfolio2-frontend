@@ -63,18 +63,16 @@ const About: React.FC = () => {
   });
 
   return (
-    <section id="about" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden content-shift ${
-      inView ? 'shifted' : ''
-    } ${
+    <section id="about" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden ${
       theme === 'dark' 
-        ? 'bg-gradient-to-br from-slate-950/80 via-slate-900/60 to-slate-950/80' 
-        : 'bg-gradient-to-br from-white/80 via-gray-50/60 to-white/80'
+        ? 'bg-gradient-to-br from-slate-900/50 via-purple-900/10 to-slate-900/50' 
+        : 'bg-gradient-to-br from-blue-50/50 via-white to-purple-50/30'
     }`}>
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-3">
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, ${theme === 'dark' ? '#22d3ee' : '#3b82f6'} 1px, transparent 0)`,
-          backgroundSize: '60px 60px'
+          backgroundImage: `radial-gradient(circle at 1px 1px, ${theme === 'dark' ? '#8b5cf6' : '#3b82f6'} 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
         }} />
       </div>
 

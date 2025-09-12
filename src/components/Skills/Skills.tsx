@@ -149,12 +149,10 @@ const Skills: React.FC = () => {
   });
 
   return (
-    <section id="skills" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden content-shift ${
-      inView ? 'shifted' : ''
-    } ${
+    <section id="skills" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden ${
       theme === 'dark' 
-        ? 'bg-gradient-to-br from-slate-950 via-slate-900/40 to-slate-950' 
-        : 'bg-gradient-to-br from-gray-50 via-white/80 to-gray-50'
+        ? 'bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900' 
+        : 'bg-gradient-to-br from-white via-blue-50/50 to-purple-50/30'
     }`}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
