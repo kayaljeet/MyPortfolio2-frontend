@@ -51,15 +51,24 @@ const SkillCard: React.FC<{
       
       {/* Skill Icon */}
       <motion.div
-        className={`text-4xl mb-4 relative z-10`}
+        className="text-4xl mb-4 relative z-10"
         whileHover={{ 
           rotate: [0, -10, 10, 0],
           scale: 1.2
         }}
         transition={{ duration: 0.5 }}
       >
-        {skill.icon || '⚡'}
+        {skill.icon ? (
+          <img 
+            src={skill.icon} 
+            alt={skill.name || "Skill icon"} 
+            className="w-16 h-16 mx-auto" // adjust size as needed
+          />
+        ) : (
+          '⚡'
+        )}
       </motion.div>
+
       
       {/* Skill Name */}
       <motion.h4 
