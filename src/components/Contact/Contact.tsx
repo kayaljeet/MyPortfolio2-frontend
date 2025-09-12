@@ -41,7 +41,13 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="contact" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 content-shift ${
+      inView ? 'shifted' : ''
+    } ${
+      theme === 'dark' 
+        ? 'bg-gradient-to-br from-slate-950/50 via-slate-900/30 to-slate-950/50' 
+        : 'bg-gradient-to-br from-white/70 via-gray-50/50 to-white/70'
+    }`}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
