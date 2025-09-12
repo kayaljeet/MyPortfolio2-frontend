@@ -14,7 +14,13 @@ const Experience: React.FC = () => {
   });
 
   return (
-    <section id="experience" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="experience" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 content-shift ${
+      inView ? 'shifted' : ''
+    } ${
+      theme === 'dark' 
+        ? 'bg-gradient-to-br from-slate-950/60 via-slate-900/40 to-slate-950/60' 
+        : 'bg-gradient-to-br from-gray-50/80 via-white/60 to-gray-50/80'
+    }`}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
