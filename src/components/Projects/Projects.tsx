@@ -224,12 +224,10 @@ const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <section id="projects" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden content-shift ${
-      inView ? 'shifted' : ''
-    } ${
+    <section id="projects" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden ${
       theme === 'dark' 
-        ? 'bg-gradient-to-br from-slate-950/70 via-slate-900/50 to-slate-950/70' 
-        : 'bg-gradient-to-br from-white/90 via-gray-50/70 to-white/90'
+        ? 'bg-gradient-to-br from-slate-900/50 via-purple-900/10 to-slate-900/50' 
+        : 'bg-gradient-to-br from-blue-50/30 via-white to-purple-50/50'
     }`}>
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
