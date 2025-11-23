@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { ExternalLink, Github, X } from 'lucide-react';
 import { useProjectsData } from '../../hooks/useProjectsData';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 import CrypticText from '../common/CrypticText';
 
@@ -38,6 +39,9 @@ const ProjectCard: React.FC<{
   inView: boolean;
   onClick: () => void;
 }> = ({ project, index, inView, onClick }) => {
+  const isMobile = useMediaQuery('(max-width: 767px)');
+  const crypticDuration = isMobile ? 600 : 1000;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -63,7 +67,7 @@ const ProjectCard: React.FC<{
         {/* Category Badge */}
         <div className="absolute top-4 left-4">
           <span className="px-3 py-1 text-xs font-medium uppercase tracking-wider bg-black/80 border border-neutral-800 text-neutral-400">
-            <CrypticText text={project.category} duration={1000} />
+            <CrypticText text={project.category} duration={crypticDuration} />
           </span>
         </div>
       </div>
@@ -71,11 +75,11 @@ const ProjectCard: React.FC<{
       {/* Content */}
       <div className="p-8 flex flex-col flex-grow">
         <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-brand-neon transition-colors duration-300 tracking-tight">
-          <CrypticText text={project.title} duration={1000} />
+          <CrypticText text={project.title} duration={crypticDuration} />
         </h3>
 
         <p className="text-neutral-500 mb-6 line-clamp-3 leading-relaxed break-words">
-          <CrypticText text={project.description} duration={1000} />
+          <CrypticText text={project.description} duration={crypticDuration} />
         </p>
 
         {/* Tech Stack */}
@@ -85,7 +89,7 @@ const ProjectCard: React.FC<{
               key={tech}
               className="px-3 py-1 text-xs font-medium bg-neutral-900 text-neutral-400 border border-neutral-800"
             >
-              <CrypticText text={tech} duration={1000} delay={i * 50} />
+              <CrypticText text={tech} duration={crypticDuration} delay={i * 50} />
             </span>
           ))}
           {project.technologies.length > 4 && (

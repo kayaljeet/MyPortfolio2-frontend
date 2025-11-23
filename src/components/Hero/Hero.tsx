@@ -37,7 +37,7 @@ const Hero: React.FC = () => {
             className="mb-8"
             style={{ minHeight: 'auto' }}
           >
-            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold leading-tight sm:leading-none">
+            <h1 className="text-2xl sm:text-6xl lg:text-8xl font-bold leading-tight sm:leading-none">
               <span className="block mb-2 sm:mb-3 text-white typing-animation inline-block max-w-full break-words">
                 {personalData?.name || 'Your Name'}
               </span>

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useSkillsData } from '../../hooks/useSkillsData';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 import CrypticText from '../common/CrypticText';
 
@@ -25,6 +26,9 @@ const SkillCard: React.FC<{
   categoryIndex: number;
   inView: boolean;
 }> = ({ skill, index, categoryIndex, inView }) => {
+  const isMobile = useMediaQuery('(max-width: 639px)');
+  const crypticDuration = isMobile ? 600 : 1000;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -53,12 +57,12 @@ const SkillCard: React.FC<{
 
       {/* Skill Name */}
       <h4 className="font-semibold mb-2 text-lg text-white">
-        <CrypticText text={skill.name} duration={1000} />
+        <CrypticText text={skill.name} duration={crypticDuration} />
       </h4>
 
       {/* Skill Level */}
       <div className="text-sm mb-3 text-neutral-500">
-        <CrypticText text={skill.level} duration={1000} />
+        <CrypticText text={skill.level} duration={crypticDuration} />
       </div>
 
       {/* Progress Bar */}
