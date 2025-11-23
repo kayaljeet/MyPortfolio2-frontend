@@ -4,6 +4,20 @@ import { useInView } from 'react-intersection-observer';
 import { Download, Code, Award, Coffee } from 'lucide-react';
 import { usePersonalData } from '../../hooks/usePersonalData';
 
+// Helper function to convert GitHub blob URLs to raw URLs
+const getImageUrl = (url: string | undefined): string | undefined => {
+  if (!url) return undefined;
+
+  // Convert GitHub blob URLs to raw URLs
+  if (url.includes('github.com') && url.includes('/blob/')) {
+    return url
+      .replace('github.com', 'raw.githubusercontent.com')
+      .replace('/blob/', '/');
+  }
+
+  return url;
+};
+
 const StatCard: React.FC<{ icon: React.ReactNode; value: string; label: string; delay: number }> = ({
   icon, value, label, delay
 }) => {
@@ -103,7 +117,7 @@ const About: React.FC = () => {
             >
               {personalData?.image ? (
                 <img
-                  src={personalData.image}
+                  src={getImageUrl(personalData.image)}
                   alt={personalData.name || 'Profile'}
                   className="w-full h-full object-cover"
                 />

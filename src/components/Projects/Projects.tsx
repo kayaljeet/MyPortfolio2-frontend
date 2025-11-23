@@ -6,6 +6,20 @@ import { useProjectsData } from '../../hooks/useProjectsData';
 
 import CrypticText from '../common/CrypticText';
 
+// Helper function to convert GitHub blob URLs to raw URLs
+const getImageUrl = (url: string | undefined): string | undefined => {
+  if (!url) return undefined;
+
+  // Convert GitHub blob URLs to raw URLs
+  if (url.includes('github.com') && url.includes('/blob/')) {
+    return url
+      .replace('github.com', 'raw.githubusercontent.com')
+      .replace('/blob/', '/');
+  }
+
+  return url;
+};
+
 interface Project {
   id: number;
   title: string;
@@ -36,7 +50,7 @@ const ProjectCard: React.FC<{
       <div className="relative aspect-[16/10] overflow-hidden bg-neutral-900">
         {project.image ? (
           <motion.img
-            src={project.image}
+            src={getImageUrl(project.image)}
             alt={project.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />

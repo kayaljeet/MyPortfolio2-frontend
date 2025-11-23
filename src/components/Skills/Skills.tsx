@@ -5,6 +5,20 @@ import { useSkillsData } from '../../hooks/useSkillsData';
 
 import CrypticText from '../common/CrypticText';
 
+// Helper function to convert GitHub blob URLs to raw URLs
+const getImageUrl = (url: string | undefined): string | undefined => {
+  if (!url) return undefined;
+
+  // Convert GitHub blob URLs to raw URLs
+  if (url.includes('github.com') && url.includes('/blob/')) {
+    return url
+      .replace('github.com', 'raw.githubusercontent.com')
+      .replace('/blob/', '/');
+  }
+
+  return url;
+};
+
 const SkillCard: React.FC<{
   skill: any;
   index: number;
@@ -26,7 +40,7 @@ const SkillCard: React.FC<{
       <div className="text-4xl mb-4">
         {skill.icon ? (
           <img
-            src={skill.icon}
+            src={getImageUrl(skill.icon)}
             alt={skill.name || "Skill icon"}
             className="w-12 h-12"
           />
