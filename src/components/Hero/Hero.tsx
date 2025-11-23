@@ -1,35 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, Sparkles } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { Download } from 'lucide-react';
 import { usePersonalData } from '../../hooks/usePersonalData';
 
-const FloatingElement: React.FC<{ delay: number; children: React.ReactNode }> = ({ delay, children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20, scale: 0.8 }}
-    animate={{ 
-      opacity: 1, 
-      y: 0, 
-      scale: 1,
-      rotate: [0, 1, -1, 0]
-    }}
-    transition={{ 
-      duration: 0.8, 
-      delay,
-      rotate: {
-        duration: 4,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }}
-    className="absolute"
-  >
-    {children}
-  </motion.div>
-);
-
 const Hero: React.FC = () => {
-  const { theme } = useTheme();
   const { data: personalData } = usePersonalData();
 
   const scrollToSection = (sectionId: string) => {
@@ -38,194 +12,147 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Enhanced Background with Parallax */}
-      <motion.div
-        className="absolute inset-0 opacity-30"
-        animate={{
-          background: theme === 'dark' 
-            ? [
-                'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%)',
-                'radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%)',
-                'radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%)'
-              ]
-            : [
-                'radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)',
-                'radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.15) 0%, transparent 50%)',
-                'radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%)'
-              ]
-        }}
-        transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
-      />
-
-      {/* Floating Elements */}
-      <FloatingElement delay={0.5}>
-        <div className={`w-4 h-4 rounded-full ${theme === 'dark' ? 'bg-purple-400' : 'bg-blue-400'} opacity-60`} 
-             style={{ left: '10%', top: '20%' }} />
-      </FloatingElement>
-      <FloatingElement delay={1.2}>
-        <Sparkles className={`w-6 h-6 ${theme === 'dark' ? 'text-pink-400' : 'text-purple-500'} opacity-40`} 
-                  style={{ right: '15%', top: '30%' }} />
-      </FloatingElement>
-      <FloatingElement delay={2.1}>
-        <div className={`w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-indigo-400'} opacity-50`} 
-             style={{ left: '80%', bottom: '40%' }} />
-      </FloatingElement>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black grain-texture pt-20 pb-0 lg:pt-48 lg:pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 text-center relative z-10 -mt-24 lg:-mt-32">
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {/* Animated Badge */}
+          {/* Availability Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium mb-8 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 text-purple-300'
-                : 'bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200/50 text-blue-700'
-            }`}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-sm font-medium mb-8 sm:mb-12 bg-neutral-900 border border-neutral-800 text-neutral-400 uppercase tracking-wide max-w-full whitespace-normal text-center"
           >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              className="mr-2"
-            >
-              <Sparkles className="w-4 h-4" />
-            </motion.div>
             Available for new opportunities
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 40, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6"
+          {/* Main Heading */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
+            className="mb-8"
+            style={{ minHeight: 'auto' }}
           >
-            <motion.span 
-              className="block mb-2"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-            >
-              {personalData?.name || 'Soumojit Kayal'}
-            </motion.span>
-            <motion.span 
-              className={`${
-              theme === 'dark'
-                ? 'bg-gradient-to-r from-purple-400 to-pink-400'
-                : 'bg-gradient-to-r from-blue-600 to-purple-600'
-            } bg-clip-text text-transparent`}
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              >
-              {personalData?.title || 'Engineer'}
-            </motion.span>
-          </motion.h1>
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold leading-tight sm:leading-none">
+              <span className="block mb-2 sm:mb-3 text-white sm:typing-animation inline-block max-w-full break-words">
+                {personalData?.name || 'Your Name'}
+              </span>
+              <span className="block text-brand-neon sm:typing-animation-secondary inline-block max-w-full break-words">
+                {personalData?.title || 'Developer'}
+              </span>
+            </h1>
+          </motion.div>
 
+          {/* Tagline */}
           <motion.p
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
-            className={`text-xl sm:text-2xl mb-8 max-w-3xl mx-auto ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-lg sm:text-2xl mb-12 sm:mb-16 max-w-3xl mx-auto text-neutral-500 leading-relaxed px-4"
           >
             {personalData?.tagline || 'Crafting digital experiences with modern web technologies'}
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
-          >
-            <motion.button
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: theme === 'dark' 
-                  ? '0 20px 40px rgba(168, 85, 247, 0.4)' 
-                  : '0 20px 40px rgba(59, 130, 246, 0.3)',
-                y: -2
-              }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 1.5 }}
-              onClick={() => scrollToSection('projects')}
-              className={`px-8 py-4 rounded-full font-medium transition-all duration-500 relative overflow-hidden ${
-                theme === 'dark'
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/25'
-                  : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25'
-              }`}
+          {/* Wrapper for buttons and arrow - ensures arrow aligns with buttons */}
+          <div className="relative flex flex-col items-center">
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-20"
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
-                initial={{ x: '-100%' }}
-                whileHover={{ x: '100%' }}
-                transition={{ duration: 0.6 }}
-              />
-              <span className="relative z-10">
-              View My Work
-              </span>
-            </motion.button>
-            <motion.button
-              whileHover={{ 
-                scale: 1.05,
-                borderColor: theme === 'dark' ? '#a855f7' : '#3b82f6',
-                boxShadow: theme === 'dark' 
-                  ? '0 0 20px rgba(168, 85, 247, 0.3)' 
-                  : '0 0 20px rgba(59, 130, 246, 0.3)',
-                y: -2
-              }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 1.7 }}
-              onClick={() => scrollToSection('contact')}
-              className={`px-8 py-4 rounded-full font-medium border-2 transition-all duration-500 relative overflow-hidden ${
-                theme === 'dark'
-                  ? 'border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white'
-                  : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'
-              }`}
-            >
-              Get In Touch
-            </motion.button>
-          </motion.div>
-        </motion.div>
+              <motion.button
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => scrollToSection('projects')}
+                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full font-medium transition-all duration-300 bg-transparent border-2 border-brand-neon text-brand-neon hover:bg-brand-neon hover:text-black text-sm sm:text-base tracking-wide"
+              >
+                View My Work
+              </motion.button>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.9 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <motion.button
-            animate={{ 
-              y: [0, 8, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            whileHover={{ 
-              scale: 1.2,
-              rotate: 5
-            }}
-            onClick={() => scrollToSection('about')}
-            className={`p-3 rounded-full transition-all duration-300 ${
-              theme === 'dark' ? 'text-purple-400' : 'text-blue-600'
-            }`}
-            aria-label="Scroll to about section"
-          >
-            <ArrowDown className="w-6 h-6" />
-          </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => scrollToSection('contact')}
+                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full font-medium transition-all duration-300 bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-sm sm:text-base tracking-wide"
+              >
+                Get In Touch
+              </motion.button>
+
+              {personalData?.resume && (
+                <motion.a
+                  href={personalData.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full font-medium transition-all duration-300 bg-transparent border-2 border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white flex items-center justify-center gap-3 text-sm sm:text-base tracking-wide"
+                >
+                  <Download className="w-5 h-5" />
+                  <span>Resume</span>
+                </motion.a>
+              )}
+            </motion.div>
+
+            {/* Scroll Indicator - Positioned relative to buttons container */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1 }}
+              className="absolute -bottom-1 sm:-bottom-1 left-4/10 transform -translate-x-1/2"
+            >
+              <motion.button
+                animate={{
+                  y: [0, 10, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                whileHover={{ scale: 1.1 }}
+                onClick={() => scrollToSection('about')}
+                className="p-3 rounded-full transition-all duration-300 hover:bg-neutral-900"
+                aria-label="Scroll to about section"
+              >
+                {/* 8-bit Pixelated Down Arrow */}
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="transition-all duration-300"
+                  style={{ filter: 'drop-shadow(0 0 4px rgba(0, 255, 0, 0.5))' }}
+                >
+                  {/* Pixelated arrow shape */}
+                  <rect x="11" y="4" width="2" height="2" fill="#00FF00" />
+                  <rect x="11" y="6" width="2" height="2" fill="#00FF00" />
+                  <rect x="11" y="8" width="2" height="2" fill="#00FF00" />
+                  <rect x="11" y="10" width="2" height="2" fill="#00FF00" />
+                  <rect x="11" y="12" width="2" height="2" fill="#00FF00" />
+
+                  {/* Arrow head */}
+                  <rect x="7" y="14" width="2" height="2" fill="#00FF00" />
+                  <rect x="9" y="14" width="2" height="2" fill="#00FF00" />
+                  <rect x="11" y="14" width="2" height="2" fill="#00FF00" />
+                  <rect x="13" y="14" width="2" height="2" fill="#00FF00" />
+                  <rect x="15" y="14" width="2" height="2" fill="#00FF00" />
+
+                  <rect x="9" y="16" width="2" height="2" fill="#00FF00" />
+                  <rect x="11" y="16" width="2" height="2" fill="#00FF00" />
+                  <rect x="13" y="16" width="2" height="2" fill="#00FF00" />
+
+                  <rect x="11" y="18" width="2" height="2" fill="#00FF00" />
+                </svg>
+              </motion.button>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>

@@ -8,17 +8,24 @@ import Projects from './components/Projects/Projects';
 import Experience from './components/Experience/Experience';
 import Contact from './components/Contact/Contact';
 
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+
+import { DataProvider } from './contexts/DataContext';
+
 function App() {
   return (
     <ThemeProvider>
-      <Layout>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Contact />
-      </Layout>
+      <DataProvider>
+        <Layout>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Experience />
+          <Contact />
+          <ScrollToTop />
+        </Layout>
+      </DataProvider>
     </ThemeProvider>
   );
 }

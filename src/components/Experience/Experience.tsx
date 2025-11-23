@@ -2,11 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Calendar, MapPin } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
 import { useExperienceData } from '../../hooks/useExperienceData';
+import CrypticText from '../common/CrypticText';
 
 const Experience: React.FC = () => {
-  const { theme } = useTheme();
   const { data: experienceData } = useExperienceData();
   const { ref, inView } = useInView({
     threshold: 0.2,
@@ -14,129 +13,102 @@ const Experience: React.FC = () => {
   });
 
   return (
-    <section id="experience" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="experience" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-neutral-950 grain-texture">
       <div className="max-w-6xl mx-auto">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="mb-12 sm:mb-20"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            <span className={`${
-              theme === 'dark'
-                ? 'bg-gradient-to-r from-purple-400 to-pink-400'
-                : 'bg-gradient-to-r from-blue-600 to-purple-600'
-            } bg-clip-text text-transparent`}>
-              Experience
-            </span>
+          <div className="inline-block px-4 py-2 mb-6 text-sm font-medium uppercase tracking-wider bg-neutral-900 border border-neutral-800 text-neutral-400">
+            Professional Journey
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tighter">
+            <span className="text-white">Work </span>
+            <span className="text-brand-neon">Experience</span>
           </h2>
-          <div className={`w-24 h-1 mx-auto ${
-            theme === 'dark'
-              ? 'bg-gradient-to-r from-purple-400 to-pink-400'
-              : 'bg-gradient-to-r from-blue-600 to-purple-600'
-          }`} />
         </motion.div>
 
+        {/* Timeline */}
         <div className="relative">
-          {/* Timeline line */}
-          <div className={`absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 transform md:-translate-x-1/2 ${
-            theme === 'dark'
-              ? 'bg-gradient-to-b from-purple-500 to-pink-500'
-              : 'bg-gradient-to-b from-blue-500 to-purple-500'
-          }`} />
+          {/* Timeline Line */}
+
 
           {(experienceData || []).map((exp, index) => (
             <motion.div
               key={exp.id}
               initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              className={`relative mb-12 md:mb-16 ${
-                index % 2 === 0 ? 'md:text-right' : 'md:text-left'
-              }`}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
+              className={`relative mb-12 sm:mb-16 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'
+                }`}
             >
-              {/* Timeline dot */}
-              <div className={`absolute left-4 md:left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full ${
-                theme === 'dark'
-                  ? 'bg-gradient-to-br from-purple-500 to-pink-500'
-                  : 'bg-gradient-to-br from-blue-500 to-purple-500'
-              } shadow-lg z-10`} />
+              {/* Timeline Line */}
+              {index !== (experienceData || []).length - 1 && (
+                <div className="absolute left-1.5 md:left-1/2 top-1/2 w-px bg-neutral-800 transform md:-translate-x-1/2 h-[calc(100%+3rem)] sm:h-[calc(100%+4rem)]" />
+              )}
 
-              <div className={`ml-12 md:ml-0 ${
-                index % 2 === 0
-                  ? 'md:mr-[52%]'
-                  : 'md:ml-[52%]'
-              }`}>
+              {/* Timeline Dot */}
+              <div className="absolute left-0 md:left-1/2 top-0 md:top-1/2 transform md:-translate-y-1/2 md:-translate-x-1/2 w-3 h-3 rounded-full bg-brand-neon z-10 mt-2 md:mt-0" />
+
+              <div className={`ml-8 md:ml-0 ${index % 2 === 0
+                ? 'md:mr-[52%]'
+                : 'md:ml-[52%]'
+                }`}>
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className={`p-6 rounded-xl transition-all duration-300 ${
-                    theme === 'dark'
-                      ? 'bg-slate-800/50 hover:bg-slate-700/50 border border-purple-500/20'
-                      : 'bg-white/50 hover:bg-white/80 border border-blue-200/50 shadow-lg'
-                  }`}
+                  whileHover={{ y: -4 }}
+                  className={`p-6 sm:p-8 bg-black border-neutral-800 hover:border-brand-neon transition-all duration-300 border-l-2 ${index % 2 === 0 ? 'md:border-l-0 md:border-r-2' : ''
+                    }`}
                 >
-                  <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mb-3 ${
-                    theme === 'dark'
-                      ? 'bg-purple-900/50 text-purple-300'
-                      : 'bg-blue-100 text-blue-700'
-                  }`}>
-                    {exp.type}
+                  <div className="inline-flex px-3 py-1 text-xs font-medium uppercase tracking-wider bg-neutral-900 border border-neutral-800 text-neutral-400 mb-4">
+                    <CrypticText text={exp.type} duration={1000} />
                   </div>
-                  
-                  <h3 className="text-xl font-semibold mb-2">{exp.position}</h3>
-                  <h4 className={`text-lg font-medium mb-3 ${
-                    theme === 'dark' ? 'text-purple-400' : 'text-blue-600'
-                  }`}>
-                    {exp.company}
+
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2 text-white tracking-tight">
+                    <CrypticText text={exp.position} duration={1000} />
+                  </h3>
+                  <h4 className="text-lg sm:text-xl font-semibold mb-4 text-brand-neon">
+                    <CrypticText text={exp.company} duration={1000} />
                   </h4>
-                  
-                  <div className={`flex flex-col sm:flex-row sm:items-center gap-2 mb-4 text-sm ${
-                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      <span>{exp.duration}</span>
+
+                  {/* Meta Info */}
+                  <div className="flex flex-col sm:flex-row gap-3 mb-4 text-sm text-neutral-500">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      <CrypticText text={exp.duration} duration={1000} />
                     </div>
-                    <div className="flex items-center">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span>{exp.location}</span>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      <CrypticText text={exp.location} duration={1000} />
                     </div>
                   </div>
-                  
-                  <p className={`mb-4 ${
-                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                  }`}>
-                    {exp.description}
+
+                  <p className="mb-4 text-neutral-400 leading-relaxed text-sm sm:text-base">
+                    <CrypticText text={exp.description} duration={1000} />
                   </p>
-                  
+
                   {exp.achievements && (
-                    <ul className={`space-y-1 text-sm ${
-                      theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
+                    <ul className="space-y-2 text-sm text-neutral-400 mb-4">
                       {exp.achievements.map((achievement, i) => (
-                        <li key={i} className="flex items-start">
-                          <span className={`inline-block w-1.5 h-1.5 rounded-full mt-2 mr-2 flex-shrink-0 ${
-                            theme === 'dark' ? 'bg-purple-400' : 'bg-blue-600'
-                          }`} />
-                          {achievement}
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="inline-block w-1 h-1 rounded-full mt-2 bg-brand-neon flex-shrink-0" />
+                          <CrypticText text={achievement} duration={1000} delay={i * 100} />
                         </li>
                       ))}
                     </ul>
                   )}
-                  
+
                   {exp.technologies && (
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {exp.technologies.map((tech) => (
+                    <div className="flex flex-wrap gap-2">
+                      {exp.technologies.map((tech, i) => (
                         <span
                           key={tech}
-                          className={`px-2 py-1 rounded text-xs ${
-                            theme === 'dark'
-                              ? 'bg-slate-700 text-gray-300'
-                              : 'bg-gray-200 text-gray-700'
-                          }`}
+                          className="px-3 py-1 text-xs font-medium bg-neutral-900 text-neutral-400 border border-neutral-800"
                         >
-                          {tech}
+                          <CrypticText text={tech} duration={1000} delay={i * 50} />
                         </span>
                       ))}
                     </div>

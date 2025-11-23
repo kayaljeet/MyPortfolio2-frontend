@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { ExternalLink, Github, X, Folder, Star } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { ExternalLink, Github, X } from 'lucide-react';
 import { useProjectsData } from '../../hooks/useProjectsData';
+
+import CrypticText from '../common/CrypticText';
 
 interface Project {
   id: number;
@@ -17,163 +18,80 @@ interface Project {
   category: string;
 }
 
-const ProjectCard: React.FC<{ 
-  project: Project; 
-  index: number; 
-  theme: string;
+const ProjectCard: React.FC<{
+  project: Project;
+  index: number;
   inView: boolean;
   onClick: () => void;
-}> = ({ project, index, theme, inView, onClick }) => {
+}> = ({ project, index, inView, onClick }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50, rotateX: -15 }}
-      animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-      transition={{ duration: 0.8, delay: index * 0.1, ease: "easeOut" }}
-      whileHover={{ 
-        y: -10,
-        rotateX: 5,
-        rotateY: 5,
-        scale: 1.02,
-        boxShadow: theme === 'dark' 
-          ? '0 30px 60px rgba(168, 85, 247, 0.3)' 
-          : '0 30px 60px rgba(59, 130, 246, 0.2)',
-        transition: { duration: 0.3 }
-      }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
       onClick={onClick}
-      className={`cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 group relative ${
-        theme === 'dark'
-          ? 'bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-purple-500/20 hover:border-purple-400/50'
-          : 'bg-gradient-to-br from-white/90 to-gray-50/90 border border-blue-200/50 hover:border-blue-300/70 shadow-lg hover:shadow-2xl'
-      }`}
+      className="cursor-pointer group bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-all duration-300 overflow-hidden"
     >
-      {/* Project Image/Icon Section */}
-      <div className={`h-56 relative overflow-hidden ${
-        theme === 'dark'
-          ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20'
-          : 'bg-gradient-to-br from-blue-600/20 to-purple-600/20'
-      }`}>
+      {/* Project Image */}
+      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-900">
         {project.image ? (
           <motion.img
             src={project.image}
             alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            whileHover={{ scale: 1.1 }}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <motion.div
-            className="w-full h-full flex items-center justify-center"
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Folder className={`w-20 h-20 ${theme === 'dark' ? 'text-purple-400' : 'text-blue-600'}`} />
-          </motion.div>
+          <div className="w-full h-full flex items-center justify-center text-neutral-700">
+            <div className="text-6xl font-bold">{project.title.charAt(0)}</div>
+          </div>
         )}
-        
-        {/* Overlay with category */}
+
+        {/* Category Badge */}
         <div className="absolute top-4 left-4">
-          <motion.span
-            initial={{ opacity: 0, scale: 0 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: index * 0.1 + 0.3 }}
-            className={`px-3 py-1 rounded-full text-xs font-medium ${
-              theme === 'dark'
-                ? 'bg-purple-900/80 text-purple-300 border border-purple-500/30'
-                : 'bg-blue-100/80 text-blue-700 border border-blue-200/50'
-            }`}
-          >
-            {project.category}
-          </motion.span>
+          <span className="px-3 py-1 text-xs font-medium uppercase tracking-wider bg-black/80 border border-neutral-800 text-neutral-400">
+            <CrypticText text={project.category} duration={1000} />
+          </span>
         </div>
-        
-        {/* Hover overlay */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          initial={{ opacity: 0 }}
-          whileHover={{ opacity: 1 }}
-        />
       </div>
-      
-      {/* Content Section */}
-      <div className="p-6 relative">
-        <motion.h3 
-          className="text-xl font-bold mb-3 group-hover:text-purple-400 transition-colors duration-300"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: index * 0.1 + 0.4 }}
-        >
-          {project.title}
-        </motion.h3>
-        
-        <motion.p 
-          className={`mb-4 line-clamp-3 ${
-            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-          }`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: index * 0.1 + 0.5 }}
-        >
-          {project.description}
-        </motion.p>
-        
+
+      {/* Content */}
+      <div className="p-8">
+        <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-brand-neon transition-colors duration-300 tracking-tight">
+          <CrypticText text={project.title} duration={1000} />
+        </h3>
+
+        <p className="text-neutral-500 mb-6 line-clamp-3 leading-relaxed break-words">
+          <CrypticText text={project.description} duration={1000} />
+        </p>
+
         {/* Tech Stack */}
-        <motion.div 
-          className="flex flex-wrap gap-2 mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: index * 0.1 + 0.6 }}
-        >
-          {project.technologies.slice(0, 3).map((tech, techIndex) => (
-            <motion.span
+        <div className="flex flex-wrap gap-2 mb-6">
+          {project.technologies.slice(0, 4).map((tech, i) => (
+            <span
               key={tech}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={inView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: index * 0.1 + 0.7 + techIndex * 0.1 }}
-              whileHover={{ scale: 1.1 }}
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
-                theme === 'dark'
-                  ? 'bg-purple-900/50 text-purple-300'
-                  : 'bg-blue-100 text-blue-700'
-              }`}
+              className="px-3 py-1 text-xs font-medium bg-neutral-900 text-neutral-400 border border-neutral-800"
             >
-              {tech}
-            </motion.span>
+              <CrypticText text={tech} duration={1000} delay={i * 50} />
+            </span>
           ))}
-          {project.technologies.length > 3 && (
-            <motion.span 
-              className={`px-3 py-1 rounded-full text-sm ${
-                theme === 'dark'
-                  ? 'bg-slate-700 text-gray-400'
-                  : 'bg-gray-200 text-gray-600'
-              }`}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={inView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: index * 0.1 + 1 }}
-            >
-              +{project.technologies.length - 3} more
-            </motion.span>
+          {project.technologies.length > 4 && (
+            <span className="px-3 py-1 text-xs bg-neutral-900 text-neutral-500 border border-neutral-800">
+              +{project.technologies.length - 4}
+            </span>
           )}
-        </motion.div>
-        
+        </div>
+
         {/* Action Buttons */}
-        <motion.div 
-          className="flex space-x-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: index * 0.1 + 0.8 }}
-        >
+        <div className="flex gap-3">
           {project.demoUrl && (
             <motion.a
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               href={project.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                theme === 'dark'
-                  ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/25'
-                  : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25'
-              }`}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-transparent border border-brand-neon text-brand-neon hover:bg-brand-neon hover:text-black transition-all duration-300"
             >
               <ExternalLink className="w-4 h-4" />
               <span>Demo</span>
@@ -181,41 +99,25 @@ const ProjectCard: React.FC<{
           )}
           {project.githubUrl && (
             <motion.a
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                theme === 'dark'
-                  ? 'border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white'
-                  : 'border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'
-              }`}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-transparent border border-white text-white hover:bg-white hover:text-black transition-all duration-300"
             >
               <Github className="w-4 h-4" />
               <span>Code</span>
             </motion.a>
           )}
-        </motion.div>
-        
-        {/* Decorative corner element */}
-        <motion.div
-          className={`absolute top-4 right-4 opacity-20 group-hover:opacity-60 transition-opacity duration-300 ${
-            theme === 'dark' ? 'text-purple-400' : 'text-blue-600'
-          }`}
-          whileHover={{ rotate: 180, scale: 1.2 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Star className="w-5 h-5" />
-        </motion.div>
+        </div>
       </div>
     </motion.div>
   );
 };
 
 const Projects: React.FC = () => {
-  const { theme } = useTheme();
   const { data: projectsData } = useProjectsData();
   const { ref, inView } = useInView({
     threshold: 0.2,
@@ -224,79 +126,42 @@ const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <section id="projects" ref={ref} className={`py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden ${
-      theme === 'dark' 
-        ? 'bg-gradient-to-br from-slate-900/50 via-purple-900/10 to-slate-900/50' 
-        : 'bg-gradient-to-br from-blue-50/30 via-white to-purple-50/50'
-    }`}>
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(45deg, ${theme === 'dark' ? '#8b5cf6' : '#3b82f6'} 25%, transparent 25%), 
-                           linear-gradient(-45deg, ${theme === 'dark' ? '#8b5cf6' : '#3b82f6'} 25%, transparent 25%), 
-                           linear-gradient(45deg, transparent 75%, ${theme === 'dark' ? '#8b5cf6' : '#3b82f6'} 75%), 
-                           linear-gradient(-45deg, transparent 75%, ${theme === 'dark' ? '#8b5cf6' : '#3b82f6'} 75%)`,
-          backgroundSize: '60px 60px',
-          backgroundPosition: '0 0, 0 30px, 30px -30px, -30px 0px'
-        }} />
-      </div>
-
+    <section id="projects" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-neutral-1000 grain-texture">
       <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
-          animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="mb-12 sm:mb-20"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium mb-6 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 text-purple-300'
-                : 'bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200/50 text-blue-700'
-            }`}
+            className="inline-block px-4 py-2 mb-6 text-sm font-medium uppercase tracking-wider bg-neutral-900 border border-neutral-800 text-neutral-400"
           >
-            <Folder className="w-4 h-4 mr-2" />
             Portfolio Showcase
           </motion.div>
-          
-          <motion.h2 
-            className="text-4xl sm:text-5xl font-bold mb-4"
-            initial={{ opacity: 0, y: 30 }}
+
+          <motion.h2
+            className="text-2xl sm:text-4xl lg:text-6xl font-bold mb-6 tracking-tighter"
+            initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <span className={`${
-              theme === 'dark'
-                ? 'bg-gradient-to-r from-purple-400 to-pink-400'
-                : 'bg-gradient-to-r from-blue-600 to-purple-600'
-            } bg-clip-text text-transparent`}>
-              Featured Projects
-            </span>
+            <span className="text-white">Featured </span>
+            <span className="text-brand-neon">Projects</span>
           </motion.h2>
-          
-          <motion.div 
-            className={`w-24 h-1 mx-auto ${
-            theme === 'dark'
-              ? 'bg-gradient-to-r from-purple-400 to-pink-400'
-              : 'bg-gradient-to-r from-blue-600 to-purple-600'
-          }`}
-            initial={{ width: 0 }}
-            animate={inView ? { width: 96 } : {}}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          />
         </motion.div>
 
-        {/* Projects Grid with Masonry-like Layout */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
+        {/* Projects Grid */}
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
           {(projectsData || []).map((project, index) => (
             <ProjectCard
               key={project.id}
               project={project}
               index={index}
-              theme={theme}
               inView={inView}
               onClick={() => setSelectedProject(project)}
             />
@@ -307,98 +172,63 @@ const Projects: React.FC = () => {
         <AnimatePresence>
           {selectedProject && (
             <motion.div
-              initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-              animate={{ opacity: 1, backdropFilter: 'blur(10px)' }}
-              exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
               onClick={() => setSelectedProject(null)}
             >
               <motion.div
-                initial={{ scale: 0.8, opacity: 0, y: 50 }}
+                initial={{ scale: 0.9, opacity: 0, y: 30 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.8, opacity: 0, y: 50 }}
+                exit={{ scale: 0.9, opacity: 0, y: 30 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 onClick={(e) => e.stopPropagation()}
-                className={`max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-2xl ${
-                  theme === 'dark'
-                    ? 'bg-gradient-to-br from-slate-800/95 to-slate-900/95 border border-purple-500/30 backdrop-blur-xl'
-                    : 'bg-gradient-to-br from-white/95 to-gray-50/95 border border-blue-200/50 backdrop-blur-xl shadow-2xl'
-                }`}
+                className="max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-neutral-950 border border-neutral-800"
               >
-                <div className="p-8">
-                  <div className="flex justify-between items-start mb-6">
-                    <motion.h3 
-                      className="text-3xl font-bold"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
+                <div className="p-6 sm:p-8 lg:p-12">
+                  {/* Header */}
+                  <div className="flex justify-between items-start mb-6 sm:mb-8">
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight pr-4">
                       {selectedProject.title}
-                    </motion.h3>
+                    </h3>
                     <motion.button
                       whileHover={{ scale: 1.1, rotate: 90 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setSelectedProject(null)}
-                      className={`p-3 rounded-full transition-all duration-300 ${
-                        theme === 'dark'
-                          ? 'hover:bg-slate-700 text-gray-400 hover:text-white hover:shadow-lg'
-                          : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900 hover:shadow-lg'
-                      }`}
+                      className="p-2 text-neutral-400 hover:text-white transition-colors flex-shrink-0"
                     >
                       <X className="w-6 h-6" />
                     </motion.button>
                   </div>
-                  
-                  <motion.p 
-                    className={`text-lg mb-8 leading-relaxed ${
-                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                  }`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
+
+                  {/* Description */}
+                  <p className="text-base sm:text-lg text-neutral-400 mb-8 leading-relaxed">
                     {selectedProject.longDescription || selectedProject.description}
-                  </motion.p>
-                  
-                  <motion.div 
-                    className="flex flex-wrap gap-3 mb-8"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
+                  </p>
+
+                  {/* Technologies */}
+                  <div className="flex flex-wrap gap-2 sm:gap-3 mb-8">
                     {selectedProject.technologies.map((tech) => (
-                      <motion.span
+                      <span
                         key={tech}
-                        whileHover={{ scale: 1.05 }}
-                        className={`px-4 py-2 rounded-full text-sm font-medium ${
-                          theme === 'dark'
-                            ? 'bg-purple-900/50 text-purple-300 border border-purple-500/30'
-                            : 'bg-blue-100 text-blue-700 border border-blue-200/50'
-                        }`}
+                        className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium bg-neutral-900 text-neutral-300 border border-neutral-800"
                       >
                         {tech}
-                      </motion.span>
+                      </span>
                     ))}
-                  </motion.div>
-                  
-                  <motion.div 
-                    className="flex space-x-4"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col sm:flex-row gap-4">
                     {selectedProject.demoUrl && (
                       <motion.a
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                         href={selectedProject.demoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex items-center space-x-2 px-8 py-4 rounded-xl font-medium transition-all duration-300 ${
-                          theme === 'dark'
-                            ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/25'
-                            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25'
-                        }`}
+                        className="flex items-center justify-center gap-3 px-8 py-4 font-medium bg-transparent border-2 border-brand-neon text-brand-neon hover:bg-brand-neon hover:text-black transition-all duration-300 text-sm sm:text-base"
                       >
                         <ExternalLink className="w-5 h-5" />
                         <span>View Demo</span>
@@ -406,22 +236,18 @@ const Projects: React.FC = () => {
                     )}
                     {selectedProject.githubUrl && (
                       <motion.a
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                         href={selectedProject.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex items-center space-x-2 px-8 py-4 rounded-xl font-medium transition-all duration-300 ${
-                          theme === 'dark'
-                            ? 'border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white'
-                            : 'border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'
-                        }`}
+                        className="flex items-center justify-center gap-3 px-8 py-4 font-medium bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 text-sm sm:text-base"
                       >
                         <Github className="w-5 h-5" />
                         <span>View Code</span>
                       </motion.a>
                     )}
-                  </motion.div>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>

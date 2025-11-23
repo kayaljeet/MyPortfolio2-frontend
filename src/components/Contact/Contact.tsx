@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Send } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { Mail, Phone, MapPin, Github, Linkedin, Send } from 'lucide-react';
 import { usePersonalData } from '../../hooks/usePersonalData';
 
 const Contact: React.FC = () => {
-  const { theme } = useTheme();
   const { data: personalData } = usePersonalData();
   const { ref, inView } = useInView({
     threshold: 0.3,
@@ -19,6 +17,8 @@ const Contact: React.FC = () => {
     message: '',
   });
 
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -26,151 +26,139 @@ const Contact: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', email: '', message: '' });
+    setStatus('submitting');
+
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${baseUrl}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setStatus('idle'), 3000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+    }
   };
 
   const socialIcons = {
     github: Github,
     linkedin: Linkedin,
-    twitter: Twitter,
   };
 
   return (
-    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="contact" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-black grain-texture">
       <div className="max-w-6xl mx-auto">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="mb-12 sm:mb-20"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            <span className={`${
-              theme === 'dark'
-                ? 'bg-gradient-to-r from-purple-400 to-pink-400'
-                : 'bg-gradient-to-r from-blue-600 to-purple-600'
-            } bg-clip-text text-transparent`}>
-              Get In Touch
-            </span>
+          <div className="inline-block px-4 py-2 mb-6 text-sm font-medium uppercase tracking-wider bg-neutral-900 border border-neutral-800 text-neutral-400">
+            Let's Connect
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tighter">
+            <span className="text-white">Get In </span>
+            <span className="text-brand-neon">Touch</span>
           </h2>
-          <div className={`w-24 h-1 mx-auto ${
-            theme === 'dark'
-              ? 'bg-gradient-to-r from-purple-400 to-pink-400'
-              : 'bg-gradient-to-r from-blue-600 to-purple-600'
-          }`} />
-          <p className={`mt-6 text-lg max-w-2xl mx-auto ${
-            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-          }`}>
-            I'm always interested in new opportunities and exciting projects. 
+
+          <p className="text-base sm:text-lg max-w-2xl text-neutral-400 leading-relaxed">
+            I'm always interested in new opportunities and exciting projects.
             Let's connect and discuss how we can work together.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-8"
+            className="space-y-8 sm:space-y-12"
           >
-            <div>
-              <h3 className="text-2xl font-semibold mb-6">Let's Connect</h3>
-              
-              <div className="space-y-4">
-                {personalData?.contact?.email && (
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="flex items-center space-x-4"
-                  >
-                    <div className={`p-3 rounded-lg ${
-                      theme === 'dark'
-                        ? 'bg-purple-900/50 text-purple-400'
-                        : 'bg-blue-100 text-blue-600'
-                    }`}>
-                      <Mail className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Email</p>
-                      <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
-                        {personalData.contact.email}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-                
-                {personalData?.contact?.phone && (
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="flex items-center space-x-4"
-                  >
-                    <div className={`p-3 rounded-lg ${
-                      theme === 'dark'
-                        ? 'bg-purple-900/50 text-purple-400'
-                        : 'bg-blue-100 text-blue-600'
-                    }`}>
-                      <Phone className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Phone</p>
-                      <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
-                        {personalData.contact.phone}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-                
-                {personalData?.contact?.location && (
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="flex items-center space-x-4"
-                  >
-                    <div className={`p-3 rounded-lg ${
-                      theme === 'dark'
-                        ? 'bg-purple-900/50 text-purple-400'
-                        : 'bg-blue-100 text-blue-600'
-                    }`}>
-                      <MapPin className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Location</p>
-                      <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
-                        {personalData.contact.location}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
+            {/* Contact Details */}
+            <div className="space-y-6">
+              {personalData?.contact?.email && (
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-4"
+                >
+                  <div className="p-3 bg-neutral-900 border border-neutral-800 text-brand-neon">
+                    <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white text-sm uppercase tracking-wider mb-1">Email</p>
+                    <p className="text-neutral-400 text-sm sm:text-base break-all">{personalData.contact.email}</p>
+                  </div>
+                </motion.div>
+              )}
+
+              {personalData?.contact?.phone && (
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-4"
+                >
+                  <div className="p-3 bg-neutral-900 border border-neutral-800 text-brand-neon">
+                    <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white text-sm uppercase tracking-wider mb-1">Phone</p>
+                    <p className="text-neutral-400 text-sm sm:text-base">{personalData.contact.phone}</p>
+                  </div>
+                </motion.div>
+              )}
+
+              {personalData?.contact?.location && (
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-4"
+                >
+                  <div className="p-3 bg-neutral-900 border border-neutral-800 text-brand-neon">
+                    <MapPin className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white text-sm uppercase tracking-wider mb-1">Location</p>
+                    <p className="text-neutral-400 text-sm sm:text-base">{personalData.contact.location}</p>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {/* Social Links */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">Follow Me</h4>
-              <div className="flex space-x-4">
+              <h4 className="text-lg font-semibold mb-4 text-white">Follow Me</h4>
+              <div className="flex gap-4">
                 {personalData?.socialLinks && Object.entries(personalData.socialLinks).map(([platform, url]) => {
                   const IconComponent = socialIcons[platform as keyof typeof socialIcons];
                   if (!IconComponent) return null;
-                  
+
                   return (
                     <motion.a
                       key={platform}
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`p-3 rounded-lg transition-all duration-300 ${
-                        theme === 'dark'
-                          ? 'bg-slate-800 hover:bg-purple-900/50 text-gray-400 hover:text-purple-400'
-                          : 'bg-white hover:bg-blue-50 text-gray-600 hover:text-blue-600 shadow-md'
-                      }`}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="p-3 sm:p-4 bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-brand-neon hover:border-neutral-700 transition-all duration-300"
                     >
-                      <IconComponent className="w-6 h-6" />
+                      <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
                     </motion.a>
                   );
                 })}
@@ -188,9 +176,7 @@ const Contact: React.FC = () => {
               <div>
                 <label
                   htmlFor="name"
-                  className={`block text-sm font-medium mb-2 ${
-                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                  }`}
+                  className="block text-sm font-medium mb-2 text-neutral-400 uppercase tracking-wider"
                 >
                   Name
                 </label>
@@ -201,11 +187,7 @@ const Contact: React.FC = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className={`w-full px-4 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 ${
-                    theme === 'dark'
-                      ? 'bg-slate-800 border border-purple-500/20 text-white placeholder-gray-400 focus:ring-purple-400 focus:border-purple-400'
-                      : 'bg-white border border-blue-200 text-gray-900 placeholder-gray-500 focus:ring-blue-400 focus:border-blue-400'
-                  }`}
+                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition-all duration-300 text-sm sm:text-base"
                   placeholder="Your name"
                 />
               </div>
@@ -213,9 +195,7 @@ const Contact: React.FC = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className={`block text-sm font-medium mb-2 ${
-                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                  }`}
+                  className="block text-sm font-medium mb-2 text-neutral-400 uppercase tracking-wider"
                 >
                   Email
                 </label>
@@ -226,11 +206,7 @@ const Contact: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className={`w-full px-4 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 ${
-                    theme === 'dark'
-                      ? 'bg-slate-800 border border-purple-500/20 text-white placeholder-gray-400 focus:ring-purple-400 focus:border-purple-400'
-                      : 'bg-white border border-blue-200 text-gray-900 placeholder-gray-500 focus:ring-blue-400 focus:border-blue-400'
-                  }`}
+                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition-all duration-300 text-sm sm:text-base"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -238,9 +214,7 @@ const Contact: React.FC = () => {
               <div>
                 <label
                   htmlFor="message"
-                  className={`block text-sm font-medium mb-2 ${
-                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                  }`}
+                  className="block text-sm font-medium mb-2 text-neutral-400 uppercase tracking-wider"
                 >
                   Message
                 </label>
@@ -250,28 +224,27 @@ const Contact: React.FC = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  rows={5}
-                  className={`w-full px-4 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 resize-none ${
-                    theme === 'dark'
-                      ? 'bg-slate-800 border border-purple-500/20 text-white placeholder-gray-400 focus:ring-purple-400 focus:border-purple-400'
-                      : 'bg-white border border-blue-200 text-gray-900 placeholder-gray-500 focus:ring-blue-400 focus:border-blue-400'
-                  }`}
+                  rows={6}
+                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition-all duration-300 resize-none text-sm sm:text-base"
                   placeholder="Tell me about your project or just say hi!"
                 />
               </div>
 
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`w-full flex items-center justify-center space-x-2 px-6 py-4 rounded-lg font-medium transition-all duration-300 ${
-                  theme === 'dark'
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg shadow-purple-500/25'
-                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25'
-                }`}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                disabled={status === 'submitting'}
+                className={`w-full flex items-center justify-center gap-3 px-8 py-4 sm:py-5 font-medium transition-all duration-300 bg-transparent border-2 border-brand-neon text-brand-neon hover:bg-brand-neon hover:text-black tracking-wide text-sm sm:text-base ${status === 'submitting' ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
               >
-                <Send className="w-5 h-5" />
-                <span>Send Message</span>
+                <Send className={`w-5 h-5 ${status === 'submitting' ? 'animate-pulse' : ''}`} />
+                <span>
+                  {status === 'submitting' ? 'Sending...' :
+                    status === 'success' ? 'Message Sent!' :
+                      status === 'error' ? 'Failed to Send' :
+                        'Send Message'}
+                </span>
               </motion.button>
             </form>
           </motion.div>

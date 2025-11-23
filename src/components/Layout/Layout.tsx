@@ -15,11 +15,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`min-h-screen transition-colors duration-500 ${
-        theme === 'dark' 
+      className={`min-h-screen transition-colors duration-500 ${theme === 'dark'
           ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white'
           : 'bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50 text-gray-900'
-      }`}
+        }`}
     >
       <div className="relative">
         {/* Animated background particles */}
@@ -27,12 +26,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className={`absolute w-1 h-1 rounded-full ${
-                theme === 'dark' ? 'bg-purple-400' : 'bg-blue-400'
-              } opacity-20`}
+              className={`absolute w-1 h-1 rounded-full ${theme === 'dark' ? 'bg-purple-400' : 'bg-blue-400'
+                } opacity-20`}
               animate={{
-                x: [0, 100, 0],
-                y: [0, -100, 0],
+                x: [0, 30, 0],
+                y: [0, -30, 0],
                 opacity: [0.2, 0.5, 0.2],
               }}
               transition={{
@@ -41,13 +39,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 delay: Math.random() * 5,
               }}
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 90}%`,
+                top: `${Math.random() * 90}%`,
               }}
             />
           ))}
         </div>
-        
+
         <Header />
         <main>{children}</main>
       </div>
