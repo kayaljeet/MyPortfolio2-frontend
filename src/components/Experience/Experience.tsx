@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Calendar, MapPin } from 'lucide-react';
@@ -8,9 +8,14 @@ import CrypticText from '../common/CrypticText';
 const Experience: React.FC = () => {
   const { data: experienceData } = useExperienceData();
   const { ref, inView } = useInView({
-    threshold: 0.2,
+    threshold: 0.1,
     triggerOnce: true,
   });
+
+  const sortedExperience = useMemo(() => {
+    if (!experienceData) return [];
+    return [...experienceData].sort((a, b) => b.id - a.id);
+  }, [experienceData]);
 
   return (
     <section id="experience" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-neutral-950 grain-texture">
@@ -37,7 +42,7 @@ const Experience: React.FC = () => {
           {/* Timeline Line */}
 
 
-          {(experienceData || []).map((exp, index) => (
+          {sortedExperience.map((exp, index) => (
             <motion.div
               key={exp.id}
               initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
@@ -47,8 +52,8 @@ const Experience: React.FC = () => {
                 }`}
             >
               {/* Timeline Line */}
-              {index !== (experienceData || []).length - 1 && (
-                <div className="absolute left-1.5 md:left-1/2 top-1/2 w-px bg-neutral-800 transform md:-translate-x-1/2 h-[calc(100%+3rem)] sm:h-[calc(100%+4rem)]" />
+              {index !== sortedExperience.length - 1 && (
+                <div className="absolute left-1.5 md:left-1/2 top-1/2 w-px bg-neutral-700 transform md:-translate-x-1/2 h-[calc(100%+3rem)] sm:h-[calc(100%+4rem)]" />
               )}
 
               {/* Timeline Dot */}

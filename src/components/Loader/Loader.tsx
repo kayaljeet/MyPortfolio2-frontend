@@ -76,9 +76,9 @@ const Loader: React.FC = () => {
                                     <motion.div
                                         key={index}
                                         className="flex-1 h-6 sm:h-8 border border-[#00FF00]/30"
-                                        initial={{ backgroundColor: 'transparent' }}
+                                        initial={{ backgroundColor: 'rgba(0, 255, 0, 0)' }}
                                         animate={{
-                                            backgroundColor: segmentFilled ? '#00FF00' : 'transparent',
+                                            backgroundColor: segmentFilled ? '#00FF00' : 'rgba(0, 255, 0, 0)',
                                         }}
                                         transition={{ duration: 0.2 }}
                                         style={{

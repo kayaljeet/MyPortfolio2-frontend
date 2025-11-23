@@ -44,10 +44,10 @@ const ProjectCard: React.FC<{
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       onClick={onClick}
-      className="cursor-pointer group bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-all duration-300 overflow-hidden"
+      className="cursor-pointer group bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-all duration-300 overflow-hidden h-full flex flex-col"
     >
       {/* Project Image */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-900">
+      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-900 flex-shrink-0">
         {project.image ? (
           <motion.img
             src={getImageUrl(project.image)}
@@ -69,7 +69,7 @@ const ProjectCard: React.FC<{
       </div>
 
       {/* Content */}
-      <div className="p-8">
+      <div className="p-8 flex flex-col flex-grow">
         <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-brand-neon transition-colors duration-300 tracking-tight">
           <CrypticText text={project.title} duration={1000} />
         </h3>
@@ -96,7 +96,7 @@ const ProjectCard: React.FC<{
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-auto">
           {project.demoUrl && (
             <motion.a
               whileHover={{ scale: 1.02, y: -2 }}
@@ -134,10 +134,11 @@ const ProjectCard: React.FC<{
 const Projects: React.FC = () => {
   const { data: projectsData } = useProjectsData();
   const { ref, inView } = useInView({
-    threshold: 0.2,
+    threshold: 0.1,
     triggerOnce: true,
   });
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
   return (
     <section id="projects" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-neutral-1000 grain-texture">
@@ -170,16 +171,60 @@ const Projects: React.FC = () => {
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
-          {(projectsData || []).map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-              inView={inView}
-              onClick={() => setSelectedProject(project)}
-            />
-          ))}
+        <div
+          onScroll={(e) => {
+            const container = e.currentTarget;
+            const firstChild = container.firstElementChild as HTMLElement;
+            if (firstChild) {
+              // gap-6 is 1.5rem = 24px
+              const gap = 24;
+              const stride = firstChild.offsetWidth + gap;
+              const newIndex = Math.round(container.scrollLeft / stride);
+              // Only update if changed to avoid excessive re-renders
+              if (newIndex !== activeProjectIndex) {
+                setActiveProjectIndex(newIndex);
+              }
+            }
+          }}
+          className="flex overflow-x-auto snap-x snap-mandatory pb-8 gap-6 sm:gap-8 md:grid md:grid-cols-2 scrollbar-hide"
+        >
+          {(projectsData || [])
+            .sort((a, b) => b.id - a.id)
+            .map((project, index) => (
+              <div key={project.id} className="flex-shrink-0 w-[85vw] md:w-auto snap-center">
+                <ProjectCard
+                  project={project}
+                  index={index}
+                  inView={inView}
+                  onClick={() => setSelectedProject(project)}
+                />
+              </div>
+            ))}
+        </div>
+
+        {/* Dot Indicators (Mobile Only) */}
+        <div className="flex justify-center gap-2 mb-12 md:hidden">
+          {(projectsData || [])
+            .sort((a, b) => b.id - a.id)
+            .map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  const container = document.querySelector('#projects .overflow-x-auto');
+                  if (container) {
+                    const firstChild = container.firstElementChild as HTMLElement;
+                    if (firstChild) {
+                      const gap = 24;
+                      const stride = firstChild.offsetWidth + gap;
+                      container.scrollTo({ left: index * stride, behavior: 'smooth' });
+                    }
+                  }
+                }}
+                className={`h-1.5 rounded-full transition-all duration-300 ${index === activeProjectIndex ? 'bg-brand-neon w-6' : 'bg-neutral-800 w-1.5'
+                  }`}
+                aria-label={`Go to project ${index + 1}`}
+              />
+            ))}
         </div>
 
         {/* Project Modal */}

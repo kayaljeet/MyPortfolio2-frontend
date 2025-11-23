@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useSkillsData } from '../../hooks/useSkillsData';
@@ -77,10 +77,96 @@ const SkillCard: React.FC<{
   );
 };
 
+const SkillCategory: React.FC<{
+  category: any;
+  categoryIndex: number;
+  inView: boolean;
+}> = ({ category, categoryIndex, inView }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const firstChild = container.firstElementChild as HTMLElement;
+      if (firstChild) {
+        // gap-4 is 1rem = 16px
+        const gap = 16;
+        const stride = firstChild.offsetWidth + gap;
+        const newIndex = Math.round(container.scrollLeft / stride);
+        setActiveIndex(newIndex);
+      }
+    }
+  };
+
+  const scrollToSkill = (index: number) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const firstChild = container.firstElementChild as HTMLElement;
+      if (firstChild) {
+        const gap = 16;
+        const stride = firstChild.offsetWidth + gap;
+        container.scrollTo({ left: index * stride, behavior: 'smooth' });
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, delay: categoryIndex * 0.1 }}
+    >
+      {/* Category Header */}
+      <div className="flex items-center mb-6 sm:mb-8">
+        <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          {category.category}
+        </h3>
+        <div className="flex-1 h-px bg-neutral-800 ml-6" />
+      </div>
+
+      {/* Skills Grid */}
+      <div
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-6 scrollbar-hide"
+      >
+        {category.skills
+          .sort((a: any, b: any) => (a.id || 999) - (b.id || 999))
+          .map((skill: any, skillIndex: number) => (
+            <div key={skill.name} className="flex-shrink-0 w-[85vw] sm:w-auto snap-center">
+              <SkillCard
+                skill={skill}
+                index={skillIndex}
+                categoryIndex={categoryIndex}
+                inView={inView}
+              />
+            </div>
+          ))}
+      </div>
+
+      {/* Dot Indicators (Mobile Only) */}
+      <div className="flex justify-center gap-2 mt-2 sm:hidden">
+        {category.skills
+          .sort((a: any, b: any) => (a.id || 999) - (b.id || 999))
+          .map((_: any, index: number) => (
+            <button
+              key={index}
+              onClick={() => scrollToSkill(index)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${index === activeIndex ? 'bg-brand-neon w-6' : 'bg-neutral-800 w-1.5'
+                }`}
+              aria-label={`Go to skill ${index + 1}`}
+            />
+          ))}
+      </div>
+    </motion.div>
+  );
+};
+
 const Skills: React.FC = () => {
   const { data: skillsData } = useSkillsData();
   const { ref, inView } = useInView({
-    threshold: 0.2,
+    threshold: 0.1,
     triggerOnce: true,
   });
 
@@ -107,33 +193,12 @@ const Skills: React.FC = () => {
         {/* Skills by Category */}
         <div className="space-y-12 sm:space-y-16">
           {(skillsData || []).map((category, categoryIndex) => (
-            <motion.div
+            <SkillCategory
               key={category.category}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: categoryIndex * 0.1 }}
-            >
-              {/* Category Header */}
-              <div className="flex items-center mb-6 sm:mb-8">
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                  {category.category}
-                </h3>
-                <div className="flex-1 h-px bg-neutral-800 ml-6" />
-              </div>
-
-              {/* Skills Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                {category.skills.map((skill, skillIndex) => (
-                  <SkillCard
-                    key={skill.name}
-                    skill={skill}
-                    index={skillIndex}
-                    categoryIndex={categoryIndex}
-                    inView={inView}
-                  />
-                ))}
-              </div>
-            </motion.div>
+              category={category}
+              categoryIndex={categoryIndex}
+              inView={inView}
+            />
           ))}
         </div>
       </div>

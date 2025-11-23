@@ -28,15 +28,15 @@ const StatCard: React.FC<{ icon: React.ReactNode; value: string; label: string; 
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
       whileHover={{ y: -4 }}
-      className="p-8 text-center bg-black border border-neutral-800 hover:border-neutral-700 transition-all duration-300"
+      className="p-4 sm:p-8 text-center bg-black border border-neutral-800 hover:border-neutral-700 transition-all duration-300"
     >
-      <div className="inline-flex p-4 mb-4 text-brand-neon">
+      <div className="inline-flex p-2 sm:p-4 mb-2 sm:mb-4 text-brand-neon">
         {icon}
       </div>
-      <div className="text-4xl font-bold mb-2 text-white">
+      <div className="text-2xl sm:text-4xl font-bold mb-1 sm:mb-2 text-white">
         {value}
       </div>
-      <div className="text-sm text-neutral-500 uppercase tracking-wider">
+      <div className="text-xs sm:text-sm text-neutral-500 uppercase tracking-wider">
         {label}
       </div>
     </motion.div>
@@ -46,12 +46,12 @@ const StatCard: React.FC<{ icon: React.ReactNode; value: string; label: string; 
 const About: React.FC = () => {
   const { data: personalData } = usePersonalData();
   const { ref, inView } = useInView({
-    threshold: 0.3,
+    threshold: 0.1,
     triggerOnce: true,
   });
 
   return (
-    <section id="about" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-black grain-texture">
+    <section id="about" ref={ref} className="py-10 sm:py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-black grain-texture">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -75,7 +75,7 @@ const About: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-20"
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-20"
         >
           <StatCard
             icon={<Code className="w-6 h-6 sm:w-8 sm:h-8" />}

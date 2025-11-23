@@ -38,10 +38,10 @@ const Hero: React.FC = () => {
             style={{ minHeight: 'auto' }}
           >
             <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold leading-tight sm:leading-none">
-              <span className="block mb-2 sm:mb-3 text-white sm:typing-animation inline-block max-w-full break-words">
+              <span className="block mb-2 sm:mb-3 text-white typing-animation inline-block max-w-full break-words">
                 {personalData?.name || 'Your Name'}
               </span>
-              <span className="block text-brand-neon sm:typing-animation-secondary inline-block max-w-full break-words">
+              <span className="block text-brand-neon typing-animation-secondary inline-block max-w-full break-words">
                 {personalData?.title || 'Developer'}
               </span>
             </h1>

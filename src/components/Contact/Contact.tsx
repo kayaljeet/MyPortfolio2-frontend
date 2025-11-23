@@ -7,7 +7,7 @@ import { usePersonalData } from '../../hooks/usePersonalData';
 const Contact: React.FC = () => {
   const { data: personalData } = usePersonalData();
   const { ref, inView } = useInView({
-    threshold: 0.3,
+    threshold: 0.1,
     triggerOnce: true,
   });
 
@@ -187,7 +187,7 @@ const Contact: React.FC = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition-all duration-300 text-sm sm:text-base"
+                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-400 focus:outline-none focus:border-brand-neon transition-all duration-300 text-sm sm:text-base"
                   placeholder="Your name"
                 />
               </div>
@@ -206,7 +206,7 @@ const Contact: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition-all duration-300 text-sm sm:text-base"
+                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-400 focus:outline-none focus:border-brand-neon transition-all duration-300 text-sm sm:text-base"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -225,7 +225,7 @@ const Contact: React.FC = () => {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition-all duration-300 resize-none text-sm sm:text-base"
+                  className="w-full px-4 py-3 sm:py-4 bg-neutral-950 border border-neutral-800 text-white placeholder-neutral-400 focus:outline-none focus:border-brand-neon transition-all duration-300 resize-none text-sm sm:text-base"
                   placeholder="Tell me about your project or just say hi!"
                 />
               </div>
