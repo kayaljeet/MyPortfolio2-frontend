@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-sm font-medium mb-8 sm:mb-12 bg-neutral-900 border border-neutral-800 text-neutral-400 uppercase tracking-wide max-w-full whitespace-normal text-center"
+            className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-sm font-medium mb-8 mt-1 sm:mb-12 bg-neutral-900 border border-neutral-800 text-neutral-400 uppercase tracking-wide max-w-full whitespace-normal text-center"
           >
             Available for new opportunities
           </motion.div>

@@ -52,7 +52,7 @@ const Experience: React.FC = () => {
               )}
 
               {/* Timeline Dot */}
-              <div className="absolute left-0 md:left-1/2 top-0 md:top-1/2 transform md:-translate-y-1/2 md:-translate-x-1/2 w-3 h-3 rounded-full bg-brand-neon z-10 mt-2 md:mt-0" />
+              <div className="absolute left-0 md:left-1/2 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-3 h-3 rounded-full bg-brand-neon z-10" />
 
               <div className={`ml-8 md:ml-0 ${index % 2 === 0
                 ? 'md:mr-[52%]'
