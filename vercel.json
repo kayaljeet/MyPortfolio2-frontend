@@ -1,11 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/parking-ticket",
-      "destination": "/parking-ticket/",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/parking-ticket/app/:path*",
