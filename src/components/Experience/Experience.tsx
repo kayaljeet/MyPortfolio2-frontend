@@ -18,7 +18,7 @@ const Experience: React.FC = () => {
   }, [experienceData]);
 
   return (
-    <section id="experience" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-neutral-950 grain-texture">
+    <section id="experience" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-transparent grain-texture">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div

@@ -51,7 +51,7 @@ const About: React.FC = () => {
   });
 
   return (
-    <section id="about" ref={ref} className="py-10 sm:py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-black grain-texture">
+    <section id="about" ref={ref} className="py-10 sm:py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-transparent grain-texture">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div

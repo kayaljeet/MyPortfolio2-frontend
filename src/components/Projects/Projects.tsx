@@ -145,7 +145,7 @@ const Projects: React.FC = () => {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
   return (
-    <section id="projects" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-neutral-1000 grain-texture">
+    <section id="projects" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-transparent grain-texture">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div

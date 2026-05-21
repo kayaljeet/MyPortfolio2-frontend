@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black grain-texture pt-20 pb-0 lg:pt-48 lg:pb-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent grain-texture pt-20 pb-0 lg:pt-48 lg:pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 text-center relative z-10 -mt-24 lg:-mt-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

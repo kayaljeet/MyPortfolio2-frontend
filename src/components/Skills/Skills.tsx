@@ -175,7 +175,7 @@ const Skills: React.FC = () => {
   });
 
   return (
-    <section id="skills" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-black grain-texture">
+    <section id="skills" ref={ref} className="py-20 px-6 sm:px-8 lg:pl-48 lg:pr-16 bg-transparent grain-texture">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
