@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Download } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { usePersonalData } from '../../hooks/usePersonalData';
 
 const Hero: React.FC = () => {
   const { data: personalData } = usePersonalData();
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -86,15 +87,15 @@ const Hero: React.FC = () => {
 
               {personalData?.resume && (
                 <motion.a
-                  href={personalData.resume}
+                  href={personalData.resume.startsWith('http') ? personalData.resume : `${apiBaseUrl}${personalData.resume}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full font-medium transition-all duration-300 bg-transparent border-2 border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white flex items-center justify-center gap-3 text-sm sm:text-base tracking-wide"
                 >
-                  <Download className="w-5 h-5" />
-                  <span>Resume</span>
+                  <FileText className="w-5 h-5" />
+                  <span>View Resume</span>
                 </motion.a>
               )}
             </motion.div>

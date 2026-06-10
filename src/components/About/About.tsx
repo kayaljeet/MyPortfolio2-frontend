@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Download, Code, Award, Coffee } from 'lucide-react';
+import { Download, Code, Award, Coffee, FileText } from 'lucide-react';
 import { usePersonalData } from '../../hooks/usePersonalData';
 
 // Helper function to convert GitHub blob URLs to raw URLs
@@ -45,6 +45,7 @@ const StatCard: React.FC<{ icon: React.ReactNode; value: string; label: string; 
 
 const About: React.FC = () => {
   const { data: personalData } = usePersonalData();
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -185,13 +186,13 @@ const About: React.FC = () => {
                 className="pt-8"
               >
                 <a
-                  href={personalData.resume}
+                  href={personalData.resume.startsWith('http') ? personalData.resume : `${apiBaseUrl}${personalData.resume}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 px-8 py-4 font-medium bg-transparent border-2 border-brand-neon text-brand-neon hover:bg-brand-neon hover:text-black transition-all duration-300 tracking-wide text-sm sm:text-base"
                 >
-                  <Download className="w-5 h-5" />
-                  <span>Download Resume</span>
+                  <FileText className="w-5 h-5" />
+                  <span>View Resume</span>
                 </a>
               </motion.div>
             )}
